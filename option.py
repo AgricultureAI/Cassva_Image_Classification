@@ -8,17 +8,15 @@ parser.add_argument("--gpu_id", type=str, default='0')
 parser.add_argument("--device", type=str, default='cuda', help='cpu or cuda')
 
 # Data specifications
+parser.add_argument('--data_name', type=str, default='SoybeanSeed', help='dataset name: Cassva, SoybeanSeed, ')
 parser.add_argument('--data_root', type=str, default='./', help='dataset directory')
 parser.add_argument("--img_size", type=int, default=512, help='image size')
 parser.add_argument("--fold_num", type=int, default=5, help='class numble')
 
-
-# Saving specifications
-parser.add_argument('--outf', type=str, default='./exp/Vit', help='saving_path')
-
 # Model specifications
-parser.add_argument('--method', type=str, default='Vit', help='method name')
-parser.add_argument('--pretrained', action='store_true', help='use Timm pretrained ckpt')
+parser.add_argument('--method', type=str, default='SwinTransformer', help='method name：Efficientnet, Vit, SwinTransformer, AlexNet, MLPMixer, Timm_Efficientnet, Timm_Vit')
+# parser.add_argument('--pretrained', action='store_true', help='use pretrained ckpt')
+parser.add_argument('--pretrained', type=bool, default=True, help='use pretrained ckpt')
 parser.add_argument('--pretrained_model_path', type=str, default=None, help='pretrained model directory')
 
 # Training specifications
@@ -31,13 +29,24 @@ parser.add_argument("--learning_rate", type=float, default=0.0001)
 
 opt = parser.parse_args()
 
-# dataset
+# Saving specifications
+opt.outf = './exp/' + str(opt.method)
 
-opt.train_img_path = f"{opt.data_root}/data/train_images/"
-opt.train_csv_path = f"{opt.data_root}/data/train.csv"
-opt.test_img_path = f"{opt.data_root}/data/test_images/"
+# dataset path
+if opt.data_name.find('Cassva') >= 0:
+    opt.train_img_path = f"{opt.data_root}/data/train_images/"
+    opt.train_csv_path = f"{opt.data_root}/data/train.csv"
+    opt.test_img_path = None
+    opt.n_class = 5
+elif opt.data_name.find('SoybeanSeed') >= 0:
+    opt.train_img_path = f"{opt.data_root}/data/Soybean_Seeds/"
+    opt.train_csv_path = f"{opt.data_root}/data/Soybean_Seeds/train.csv"
+    opt.test_img_path = None
+    opt.n_class = 5
+    if opt.img_size >= 227:
+        opt.img_size = 227
 
-if opt.method.find('Vit') >= 0:
+if opt.method.find('Vit') >= 0 or opt.method.find('Timm_Vit') >= 0 or opt.method.find('SwinTransformer') >= 0 or opt.method.find('MLPMixer') >= 0:
     opt.img_size = 224
 
 for arg in vars(opt):

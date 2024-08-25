@@ -31,7 +31,6 @@ def main():
 
     # dataset
     train = pd.read_csv(opt.train_csv_path)
-    # train_df, valid_df = model_selection.train_test_split(df, test_size=0.1, random_state=42, stratify=df.label.values)
     folds = StratifiedKFold(n_splits=opt.fold_num, shuffle=True, random_state=rand_seed).split(
         np.arange(train.shape[0]), train.label.values)
     trn_transform = get_train_transforms(img_size=opt.img_size)
@@ -68,7 +67,7 @@ def main():
                                                           trn_transform=trn_transform,
                                                           val_transform=val_transform, bs=opt.batch_size, n_job=0)
             # model
-            model = model_generator(opt.method, opt.pretrained_model_path, pretrained=opt.pretrained).to(device)
+            model = model_generator(opt.method, opt.pretrained_model_path, pretrained=opt.pretrained, n_class=opt.n_class).to(device)
             scaler = GradScaler()
             optimizer = torch.optim.Adam(model.parameters(), lr=opt.learning_rate, betas=(0.9, 0.999))
 

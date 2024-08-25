@@ -93,7 +93,7 @@ def train_one_epoch(epoch, model, loss_fn, optimizer, train_loader, device, scal
 
         scaler.scale(loss).backward()  # 对 loss scale, scale梯度
         accuracy = (image_preds.argmax(dim=1) == image_labels).float().mean()
-        epoch_accuracy += accuracy
+        epoch_accuracy += accuracy.item()
         # loss 正则,使用指数平均
         if running_loss is None:
             running_loss = loss.item()
