@@ -14,9 +14,10 @@ parser.add_argument("--img_size", type=int, default=512, help='image size')
 parser.add_argument("--fold_num", type=int, default=5, help='class numble')
 
 # Model specifications
+parser.add_argument('--outf', type=str, default=None, help='saving_path')
 parser.add_argument('--method', type=str, default='SwinTransformer', help='method name：Efficientnet, Vit, SwinTransformer, AlexNet, MLPMixer, Timm_Efficientnet, Timm_Vit')
-# parser.add_argument('--pretrained', action='store_true', help='use pretrained ckpt')
-parser.add_argument('--pretrained', type=bool, default=True, help='use pretrained ckpt')
+parser.add_argument('--pretrained', action='store_true', help='use pretrained ckpt')
+# parser.add_argument('--pretrained', type=bool, default=True, help='use pretrained ckpt')
 parser.add_argument('--pretrained_model_path', type=str, default=None, help='pretrained model directory')
 
 # Training specifications
@@ -30,7 +31,8 @@ parser.add_argument("--learning_rate", type=float, default=0.0001)
 opt = parser.parse_args()
 
 # Saving specifications
-opt.outf = './exp/' + str(opt.method)
+if opt.outf is None:
+    opt.outf = './exp/' + str(opt.method)
 
 # dataset path
 if opt.data_name.find('Cassva') >= 0:
