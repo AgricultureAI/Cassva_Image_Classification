@@ -1,7 +1,7 @@
 import argparse
 
 
-parser = argparse.ArgumentParser(description="Cassva Image Classification Toolbox")
+parser = argparse.ArgumentParser(description="Image Classification Toolbox")
 
 # Hardware specifications
 parser.add_argument("--gpu_id", type=str, default='0')
